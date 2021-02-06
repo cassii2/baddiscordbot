@@ -4,6 +4,7 @@ import random
 
 commandDictionary = {}
 
+
 class Commands:
     async def rollDice(self, args, message):
         num = 0
@@ -22,7 +23,7 @@ class Commands:
                 num = int(args[0][1:])
             elif args[0].isnumeric():
                 num = int(args[0])
-            elif args[0].isnumeric() == False:
+            elif not args[0].isnumeric():
                 await message.channel.send('Incorrect format')
                 return
         if numArgs == 3 and args[1] == '+':
@@ -42,14 +43,20 @@ class Commands:
         num = random.randrange(1, num + 1) + add
         await message.channel.send(num)
 
+    async def ping(self, args, message):
+        await message.channel.send('Pong!')
+
+
 class Parser:
     async def parse(self, command, message):
         commandList = command.split(' ')
         await commandDictionary[commandList[0]](commandList[1:], message)
         return
 
+
 commands = Commands()
 parser = Parser()
 parse = parser.parse
 
 commandDictionary['roll'] = commands.rollDice
+commandDictionary['ping'] = commands.ping
